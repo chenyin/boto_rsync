@@ -414,12 +414,13 @@ def main():
         c = boto.connect_gs(gs_access_key_id=cloud_access_key_id,
                             gs_secret_access_key=cloud_secret_access_key)
     else:
+        from boto.s3.connection import OrdinaryCallingFormat
         if anon:
             c = boto.connect_s3(host=endpoint, anon=True)
         else:
             c = boto.connect_s3(aws_access_key_id=cloud_access_key_id,
                                 aws_secret_access_key=cloud_secret_access_key,
-                                host=endpoint)
+                                host=endpoint, is_secure=False, calling_format=OrdinaryCallingFormat())
     c.debug = debug
     b = c.get_bucket(cloud_bucket)
     if xfer_type in ['sync']:
